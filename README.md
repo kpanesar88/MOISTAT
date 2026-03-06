@@ -1,55 +1,106 @@
 # MOISTAT
 
-**Soil Moisture Monitoring & Irrigation Control System**  
+**Soil Moisture Monitoring & Automated Irrigation System**  
 Java · MATLAB · Arduino · Firmata · I2C OLED
 
 ---
 
 ## Overview
 
-MOISTAT is a real-time soil moisture monitoring and irrigation control system built using an Arduino Uno with dual software implementations in Java and MATLAB.
+MOISTAT is a real-time soil moisture monitoring and irrigation control system built using an **Arduino Uno**, with monitoring and control interfaces implemented in **Java** and **MATLAB**.
 
-The system acquires 10-bit analog moisture data, converts ADC readings to voltage, applies calibrated threshold-based classification, and actuates a MOSFET-driven water pump. Moisture trends are visualized live, and classified soil states are displayed via an I2C OLED interface.
+The system reads **10-bit analog soil moisture data**, converts ADC values to voltage, classifies soil moisture using calibrated thresholds, and activates a **MOSFET-driven water pump** when irrigation is required. Moisture levels are visualized in real time and the soil state is displayed on an **I2C OLED screen**.
+
+---
+
+## System Architecture
+
+Sensor → Arduino ADC → Serial Communication → Java / MATLAB Monitoring → Pump Control → OLED Display
+
+1. The capacitive moisture sensor outputs an analog voltage.
+2. The Arduino reads the signal through its **10-bit ADC**.
+3. Data is transmitted via **Firmata serial communication**.
+4. Java and MATLAB applications process and visualize the readings.
+5. Soil state is classified and irrigation is triggered if needed.
+6. The OLED display provides real-time feedback.
 
 ---
 
 ## Technical Highlights
 
-- Real-time 10-bit ADC acquisition and voltage conversion  
-- Sensor characterization across 0.1V–2.0V operating range  
-- Calibrated three-state soil classification logic  
-- Serial communication using Firmata4j (Java ↔ Arduino)  
-- I2C OLED display for live soil state feedback  
-- Dual real-time control implementations in MATLAB and Java  
-- MOSFET-based pump actuation for safe current handling  
+- Real-time **10-bit ADC data acquisition**
+- Conversion of ADC values to **voltage-based moisture readings**
+- Sensor characterization across a **0.1V – 2.0V operating range**
+- **Three-state soil classification logic** for irrigation decisions
+- **Serial communication** between Arduino and host applications
+- **Live data visualization** in MATLAB and Java
+- **I2C OLED display** for soil moisture status
+- **MOSFET-based pump control** for safe switching of the DC pump
 
 ---
 
-## Hardware
+## Hardware Components
 
-- Arduino Uno  
-- Capacitive soil moisture sensor (A0)  
-- MOSFET-driven DC pump (D2)  
-- SSD1306 I2C OLED display  
-
----
-
-## Software
-
-- Java (Firmata4j, JSSC)  
-- MATLAB with Arduino Support Package  
-- Real-time visualization (StdDraw / animatedline)  
+- **Arduino Uno**
+- **Capacitive Soil Moisture Sensor** (Analog input A0)
+- **MOSFET-driven DC Water Pump** (Digital output D2)
+- **SSD1306 I2C OLED Display**
+- External power supply for pump
 
 ---
 
-## Core Control Logic
+## Software Stack
 
-ADC readings (0–1023) are converted to voltage:
+### Embedded System
+- Arduino Firmware
+- Analog sensor sampling
+- Digital pump control
+- I2C communication with OLED display
 
-Voltage thresholds classify soil into:
+### Java Application
+- **Firmata4j** for Arduino communication
+- **JSSC (Java Simple Serial Connector)** for serial interface
+- Real-time data acquisition and visualization
 
-- A LOT MORE (Dry)  
-- A LITTLE MORE (Moderate)  
-- ENOUGH (Sufficient Moisture)  
+### MATLAB Interface
+- MATLAB Arduino Support Package
+- Real-time plotting using `animatedline`
+- Sensor data processing and monitoring
 
-Pump activation is triggered based on classification.
+---
+
+## Control Logic
+
+1. Read soil moisture sensor value from Arduino ADC.
+2. Convert ADC reading (0–1023) to voltage.
+3. Classify soil moisture level using calibrated thresholds.
+4. Display soil state on OLED screen.
+5. Activate pump when soil moisture falls below defined thresholds.
+
+### Soil State Classification
+
+| Voltage Range | Soil Condition | Action |
+|---------------|---------------|--------|
+| Low Voltage   | Dry Soil      | Pump Activated |
+| Medium Voltage| Moderate Moisture | Monitor |
+| High Voltage  | Sufficient Moisture | Pump Off |
+
+---
+
+## Key Learning Outcomes
+
+- Embedded system design using **microcontrollers**
+- **Hardware–software integration**
+- Sensor calibration and signal interpretation
+- Serial communication protocols
+- Real-time data visualization and monitoring
+- Safe power control using **MOSFET switching**
+
+---
+
+## Future Improvements
+
+- Wireless monitoring via WiFi or Bluetooth
+- Mobile dashboard for irrigation monitoring
+- Data logging for long-term soil analysis
+- Automated irrigation scheduling
